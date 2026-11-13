@@ -1,0 +1,65 @@
+services:
+  app:
+    image: fuji:latest
+    container_name: fuji-app
+    restart: unless-stopped
+    ports:
+      - '32233:80'
+    depends_on:
+      - postgres
+      - redis
+    env_file: .env
+    environment:
+      - AP_CONTAINER_TYPE=APP
+    volumes:
+      - ./cache:/usr/src/app/cache
+      - ./exports:/usr/src/app/exports
+    networks:
+      - fuji
+
+  worker:
+    image: fuji:latest
+    restart: unless-stopped
+    depends_on:
+      - app
+    env_file: .env
+    environment:
+      - AP_CONTAINER_TYPE=WORKER
+      - AP_FRONTEND_URL=http://app
+    deploy:
+      replicas: 5
+    volumes:
+      - ./cache:/usr/src/app/cache
+      - ./exports:/usr/src/app/exports
+    networks:
+      - fuji
+
+  postgres:
+    image: 'pgvector/pgvector:0.8.0-pg14'
+    container_name: fuji-postgres
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - 'POSTGRES_DB=${AP_POSTGRES_DATABASE}'
+      - 'POSTGRES_PASSWORD=${AP_POSTGRES_PASSWORD}'
+      - 'POSTGRES_USER=${AP_POSTGRES_USERNAME}'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fuji
+
+  redis:
+    image: 'redis:7.0.7'
+    container_name: fuji-redis
+    restart: unless-stopped
+    volumes:
+      - 'redis_data:/data'
+    networks:
+      - fuji
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  fuji:

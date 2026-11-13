@@ -212,7 +212,9 @@ Branch `rebrand` (2 commits: `6c512c71f6` rebrand, `b7833e400c` lint+validator).
 
 ### 3.7 Packaging
 
-- `docker-compose.yml` — image `fuji:latest` (×2), container/network `fuji`, `README.md` rewritten as fork readme (attribution + MIT + all-contributors kept; hero/badges/discord/crowdin/screenshots removed; install = build from repo), `docs/docs.json` (name Fuji; cloud signup/pieces links removed), `docs/install/options/docker.mdx` + `docker-compose.mdx` (local-build flow, `~/.fuji`), `deploy/activepieces-helm/values.yaml`, `deploy/pulumi/Pulumi.yaml`, `tools/update.sh`, `docker-entrypoint.sh` startup echo, `.env.example` (`AP_TEMPLATES_SOURCE_URL` commented opt-in; `AP_POSTGRES_DATABASE=fuji`).
+- `docker-compose.yml` — image `fuji:latest` (×2), container/network `fuji`, worker gets `AP_FRONTEND_URL=http://app` so its Socket.IO reaches the app inside the compose network (matches upstream's documented multi-container pattern).
+- `docker-compose.deploy.yml` — production deploy variant (host port `32233:80`, `./exports` volume, 5 worker replicas), same rebrand rules; validated with `docker compose -f docker-compose.deploy.yml config -q`.
+- `README.md` rewritten as fork readme (attribution + MIT + all-contributors kept; hero/badges/discord/crowdin/screenshots removed; install = build from repo), `docs/docs.json` (name Fuji; cloud signup/pieces links removed), `docs/install/options/docker.mdx` + `docker-compose.mdx` (local-build flow, `~/.fuji`), `deploy/activepieces-helm/values.yaml`, `deploy/pulumi/Pulumi.yaml`, `tools/update.sh`, `docker-entrypoint.sh` startup echo, `.env.example` (`AP_TEMPLATES_SOURCE_URL` commented opt-in; `AP_POSTGRES_DATABASE=fuji`).
 
 ## 4. Verification record
 
@@ -239,7 +241,8 @@ Re-apply checklist: (1) grep `rg -i activepieces packages/web/src packages/serve
 ```
 .env.example                    BRANDING.md                    README.md
 bun.lock                        deploy/activepieces-helm/values.yaml
-deploy/pulumi/Pulumi.yaml       docker-compose.yml             docker-entrypoint.sh
+deploy/pulumi/Pulumi.yaml       docker-compose.yml             docker-compose.deploy.yml
+docker-entrypoint.sh
 docs/docs.json                  docs/install/options/docker-compose.mdx
 docs/install/options/docker.mdx
 packages/core/shared/package.json
@@ -318,5 +321,6 @@ tools/update.sh
 - **Templates gallery**: off by default; `AP_TEMPLATES_SOURCE_URL` re-enables against a source you control (self-hosted JSON recommended — upstream gallery content carries their branding).
 - **Placeholder artwork**: logos are generated purple/white mountain placeholders. To re-skin: replace the 5 files in `packages/web/public/`, the mark in `fuji-wordmark.tsx`, `show-powered-by.tsx`, `flow-screenshot-utils.ts` (`POWERED_BY_LOGO_PATH`), and `defaultTheme.primaryColor` in `flags/theme.ts`.
 - **Piece icons** still load from `cdn.activepieces.com` (functional catalog data). Rehosting would require rewriting synced `piece_metadata.logoUrl` values.
-- **Local compose**: set `AP_INTERNAL_URL=http://app:3000` so the worker's Socket.IO can reach the app (the stock `AP_FRONTEND_URL=http://localhost:8080` default points the worker at itself inside the container network).
+- **Local compose**: workers need to reach the app — both compose files set `AP_FRONTEND_URL=http://app` on the worker service (the `.env` default `http://localhost:8080` points a worker container at itself inside the container network).
+- **Deploy variant**: `docker-compose.deploy.yml` expects the same `.env` (`tools/deploy.sh` generates it) plus an externally accessible `AP_FRONTEND_URL` on the app (e.g. `http://<host>:32233`) so webhook URLs and email logos resolve for end users.
 - **EE-bound branded strings** (§2.10) remain upstream-branded by license design; none execute on CE.
