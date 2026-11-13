@@ -190,18 +190,6 @@ export const flagService = (log: FastifyBaseLogger) => ({
                 updated,
             },
             {
-                id: ApFlagId.PRIVACY_POLICY_URL,
-                value: 'https://www.activepieces.com/privacy',
-                created,
-                updated,
-            },
-            {
-                id: ApFlagId.TERMS_OF_SERVICE_URL,
-                value: 'https://www.activepieces.com/terms',
-                created,
-                updated,
-            },
-            {
                 id: ApFlagId.TOOL_SEARCH_ENABLED,
                 value: isToolSearchEnabled(),
                 created,

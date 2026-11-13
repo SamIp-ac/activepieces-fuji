@@ -1,5 +1,8 @@
+import { isNil } from '@activepieces/core-utils'
 import { DEFAULT_BRAND_LOGOS, PlatformThemeColors } from '@activepieces/shared'
 import tinycolor from 'tinycolor2'
+import { system } from '../helper/system/system'
+import { AppSystemProp } from '../helper/system/system-props'
 
 function generateColorVariations(defaultColor: string) {
     const defaultColorObj = tinycolor(defaultColor)
@@ -73,8 +76,16 @@ export function generateTheme({
     }
 }
 
+const frontendUrl = system.get(AppSystemProp.FRONTEND_URL)?.replace(/\/$/, '')
+
+function withFrontendUrl(logoUrl: string): string {
+    return isNil(frontendUrl) ? logoUrl : `${frontendUrl}${logoUrl}`
+}
+
 export const defaultTheme = generateTheme({
     primaryColor: '#6e41e2',
-    websiteName: 'Activepieces',
-    ...DEFAULT_BRAND_LOGOS,
+    websiteName: 'Fuji',
+    fullLogoUrl: withFrontendUrl(DEFAULT_BRAND_LOGOS.fullLogoUrl),
+    favIconUrl: withFrontendUrl(DEFAULT_BRAND_LOGOS.favIconUrl),
+    logoIconUrl: withFrontendUrl(DEFAULT_BRAND_LOGOS.logoIconUrl),
 })

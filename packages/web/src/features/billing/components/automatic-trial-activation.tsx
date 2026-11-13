@@ -257,9 +257,6 @@ const TrialActivationScreen = ({
               <Button size="lg" onClick={activate}>
                 {t('Try again')}
               </Button>
-              <Button size="lg" variant="outline" asChild>
-                <a href={SUPPORT_MAIL_HREF}>{t('Contact support')}</a>
-              </Button>
             </div>
           </div>
         )}
@@ -335,9 +332,6 @@ const PROGRESS_CEILING = 95;
 const PROGRESS_SPAN_MS = 20 * 1000;
 const ACTIVATION_TIMEOUT_MS = 75 * 1000;
 const REDIRECT_SECONDS = 5;
-const SUPPORT_MAIL_HREF = `mailto:support@activepieces.com?subject=${encodeURIComponent(
-  'Trial activation failed',
-)}`;
 const ACTIVATION_STEPS = [
   { from: 0, message: 'Verifying your account' },
   { from: 18, message: 'Checking platform permissions' },

@@ -4,28 +4,24 @@ import {
   PlatformAdminSurface,
 } from '@activepieces/shared';
 import { t } from 'i18next';
-import { ExternalLink, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { createContext, ReactNode, useContext } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
   FeatureKey,
   FeatureTier,
-  RequestTrial,
   TIER_LABELS,
   useUpgradeClick,
 } from '@/features/billing';
 import { flagsHooks } from '@/hooks/flags-hooks';
-import { AdminControl, adminControl } from '@/lib/admin-control';
 
 export function FeatureSample({
   locked,
   title,
   description,
   tier,
-  documentationUrl,
   featureKey,
-  showContactSales = true,
   children,
 }: FeatureSampleProps) {
   const upgradeClick = useUpgradeClick();
@@ -62,26 +58,7 @@ export function FeatureSample({
               </p>
             )}
           </div>
-          {isCommunity ? (
-            <div className="flex flex-col items-center gap-3">
-              {showContactSales && featureKey !== undefined && (
-                <RequestTrial
-                  featureKey={featureKey}
-                  surface={PlatformAdminSurface.SAMPLE}
-                />
-              )}
-              <a
-                {...adminControl(AdminControl.PLAN_SAMPLE_LINK)}
-                href={documentationUrl ?? ENTERPRISE_DOCUMENTATION_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm font-medium text-accent-11 hover:underline"
-              >
-                {t('Read the docs')}
-                <ExternalLink className="size-3.5" />
-              </a>
-            </div>
-          ) : (
+          {!isCommunity && (
             <Button
               className="w-full"
               onClick={() =>
@@ -119,16 +96,11 @@ export function useInsideFeatureSample(): boolean {
 
 const InsideFeatureSampleContext = createContext(false);
 
-const ENTERPRISE_DOCUMENTATION_URL =
-  'https://www.activepieces.com/docs/install/configuration/overview#enterprise-edition-optional';
-
 export type FeatureSampleProps = {
   locked: boolean;
   featureKey?: FeatureKey;
-  showContactSales?: boolean;
   title: string;
   description?: string;
   tier?: FeatureTier;
-  documentationUrl?: string;
   children: ReactNode;
 };

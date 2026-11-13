@@ -1,6 +1,6 @@
-# Update Activepieces Docker Instances
-echo "Updating Activepieces..."
+# Update Fuji Docker Instances
+echo "Updating Fuji..."
 git pull
-docker compose pull
+docker build -t fuji:latest .
 docker compose up -d --remove-orphans
-echo "Successfully updated Activepieces."
+echo "Successfully updated Fuji."

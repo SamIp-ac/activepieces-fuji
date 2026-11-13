@@ -1,11 +1,22 @@
 import { ActivepiecesError, ErrorCode, isNil, SeekPage } from '@activepieces/core-utils'
 import { ListTemplatesRequestQuery, Template } from '@activepieces/shared'
-
-const TEMPLATES_SOURCE_URL = 'https://cloud.activepieces.com/api/v1/templates'
+import { system } from '../helper/system/system'
+import { AppSystemProp } from '../helper/system/system-props'
 
 export const communityTemplates = {
     getOrThrow: async (id: string): Promise<Template> => {
-        const url = `${TEMPLATES_SOURCE_URL}/${id}`
+        const templatesSourceUrl = getTemplatesSourceUrl()
+        if (isNil(templatesSourceUrl)) {
+            throw new ActivepiecesError({
+                code: ErrorCode.ENTITY_NOT_FOUND,
+                params: {
+                    entityType: 'template',
+                    entityId: id,
+                    message: `Template ${id} not found`,
+                },
+            })
+        }
+        const url = `${templatesSourceUrl}/${id}`
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -26,7 +37,11 @@ export const communityTemplates = {
         return template
     },
     getCategories: async (): Promise<string[]> => {
-        const url = `${TEMPLATES_SOURCE_URL}/categories`
+        const templatesSourceUrl = getTemplatesSourceUrl()
+        if (isNil(templatesSourceUrl)) {
+            return []
+        }
+        const url = `${templatesSourceUrl}/categories`
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -37,8 +52,16 @@ export const communityTemplates = {
         return categories
     },
     list: async (request: ListTemplatesRequestQuery): Promise<SeekPage<Template>> => {
+        const templatesSourceUrl = getTemplatesSourceUrl()
+        if (isNil(templatesSourceUrl)) {
+            return {
+                next: null,
+                previous: null,
+                data: [],
+            }
+        }
         const queryString = convertToQueryString(request)
-        const url = `${TEMPLATES_SOURCE_URL}?${queryString}`
+        const url = `${templatesSourceUrl}?${queryString}`
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -51,7 +74,12 @@ export const communityTemplates = {
 }
 
 
-function convertToQueryString(params: ListTemplatesRequestQuery): string {
+function getTemplatesSourceUrl(): string | null {
+    const url = system.get(AppSystemProp.TEMPLATES_SOURCE_URL)
+    return isNil(url) || url === '' ? null : url
+}
+
+function convertToQueryString(params: ListTemplatesRequestQuery) {
     const searchParams = new URLSearchParams()
 
     Object.entries(params).forEach(([key, value]) => {

@@ -19,7 +19,11 @@ import { apSetProjectContextTool, SET_PROJECT_CONTEXT_TOOL_NAME } from './tools/
 
 const PLATFORM_LEVEL_TOOL_SET = new Set<string>(PLATFORM_LEVEL_TOOL_NAMES)
 
-const MCP_SERVER_INSTRUCTIONS = `## Activepieces MCP Server
+const frontendUrl = system.get(AppSystemProp.FRONTEND_URL)?.replace(/\/$/, '')
+
+const brandLogoUrl = (path: string) => isNil(frontendUrl) ? path : `${frontendUrl}${path}`
+
+const MCP_SERVER_INSTRUCTIONS = `## Fuji MCP Server
 
 ### Workflow
 0. Project: on the platform server, call ap_set_project_context first — every project tool, including ap_list_connections and ap_list_ai_models, needs a selected project
@@ -52,18 +56,18 @@ export async function buildMcpServer({ mcp, userId, platformId, platformDisabled
     const projectId = mcp.projectId
 
     const server = new McpServer({
-        name: 'Activepieces',
-        title: 'Activepieces',
+        name: 'Fuji',
+        title: 'Fuji',
         version: '1.0.0',
-        websiteUrl: 'https://activepieces.com',
-        description: 'Automation and workflow MCP server by Activepieces',
+        websiteUrl: frontendUrl ?? '',
+        description: 'Automation and workflow MCP server by Fuji',
         icons: [
             {
-                src: 'https://cdn.activepieces.com/brand/logo.svg',
+                src: brandLogoUrl('/logo.svg'),
                 mimeType: 'image/svg+xml',
             },
             {
-                src: 'https://cdn.activepieces.com/brand/logo-192.png',
+                src: brandLogoUrl('/logo-192.png'),
                 mimeType: 'image/png',
                 sizes: ['192x192'],
             },

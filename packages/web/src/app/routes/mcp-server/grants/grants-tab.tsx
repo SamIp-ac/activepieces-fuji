@@ -33,7 +33,6 @@ import { PageBand } from '../page-band';
 
 import { buildGrantsColumns } from './grants-columns';
 
-const DOCS_URL = 'https://www.activepieces.com/docs/mcp/overview';
 const DEFAULT_PAGE_SIZE = 10;
 
 export function GrantsTab() {
@@ -152,14 +151,6 @@ export function GrantsTab() {
             'Two rows for one client is normal — signing in again creates a second connection. Revoking one leaves the other alive.',
           )}
         </span>
-        <a
-          href={DOCS_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="font-semibold text-accent-11 hover:underline"
-        >
-          {t('How connecting works')} ↗
-        </a>
       </div>
     </PageBand>
   );

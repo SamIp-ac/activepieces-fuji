@@ -3,7 +3,6 @@ import { t } from 'i18next';
 import {
   Boxes,
   Cpu,
-  ExternalLink,
   GitCompareArrows,
   HardDrive,
   Info,
@@ -19,16 +18,9 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
 import { healthQueries } from '@/features/platform-admin';
 import { flagsHooks } from '@/hooks/flags-hooks';
-import { AdminControl, adminControl } from '@/lib/admin-control';
 import { cn } from '@/lib/utils';
 
 import { DailyHealthStrip } from './daily-health-strip';
-
-const HARDWARE_DOCS_LINK =
-  'https://www.activepieces.com/docs/install/configuration/hardware#technical-specifications';
-
-const PRODUCTION_SETUP_LINK =
-  'https://www.activepieces.com/docs/install/configure-operate/production-setup#what-it-looks-like';
 
 // Matches UNKNOWN_VERSION in @activepieces/server-utils: the sentinel the backend reports when
 // it could not read its release from package.json. Not importable here (server-only package).
@@ -88,7 +80,6 @@ export function SystemHealthTab({ onSeeRuns }: SystemHealthTabProps) {
       title: t('Version'),
       icon: <Package className="size-4" />,
       status: isVersionUpToDate ? 'passed' : 'failed',
-      link: 'https://github.com/activepieces/activepieces/releases',
       message: (
         <span className="flex flex-wrap items-center gap-x-2">
           <span>
@@ -106,7 +97,6 @@ export function SystemHealthTab({ onSeeRuns }: SystemHealthTabProps) {
       title: t('Release Integrity'),
       icon: <GitCompareArrows className="size-4" />,
       status: releaseIntegrityOk ? 'passed' : 'failed',
-      link: 'https://www.activepieces.com/docs/install/configuration/overview',
       message: releaseIntegrityMessage,
     },
     {
@@ -114,7 +104,6 @@ export function SystemHealthTab({ onSeeRuns }: SystemHealthTabProps) {
       title: t('Disk'),
       icon: <HardDrive className="size-4" />,
       status: toStatus(systemHealth?.disk),
-      link: HARDWARE_DOCS_LINK,
       message: t('At least 30GB of disk space is required.'),
     },
     {
@@ -122,7 +111,6 @@ export function SystemHealthTab({ onSeeRuns }: SystemHealthTabProps) {
       title: t('RAM'),
       icon: <MemoryStick className="size-4" />,
       status: toStatus(systemHealth?.appRam),
-      link: HARDWARE_DOCS_LINK,
       message: t('At least 2GB of RAM is required.'),
     },
     {
@@ -130,7 +118,6 @@ export function SystemHealthTab({ onSeeRuns }: SystemHealthTabProps) {
       title: t('CPU'),
       icon: <Cpu className="size-4" />,
       status: toStatus(systemHealth?.appCpu),
-      link: HARDWARE_DOCS_LINK,
       message: t('At least 1 CPU core is required.'),
     },
   ];
@@ -146,7 +133,6 @@ export function SystemHealthTab({ onSeeRuns }: SystemHealthTabProps) {
       title: t('RAM'),
       icon: <MemoryStick className="size-4" />,
       status: toStatus(systemHealth?.workerRam),
-      link: HARDWARE_DOCS_LINK,
       message: workersConnected
         ? t('At least 1GB of RAM is required per worker.')
         : t('No workers are connected.'),
@@ -156,7 +142,6 @@ export function SystemHealthTab({ onSeeRuns }: SystemHealthTabProps) {
       title: t('CPU'),
       icon: <Cpu className="size-4" />,
       status: toStatus(systemHealth?.workerCpu),
-      link: HARDWARE_DOCS_LINK,
       message: workersConnected
         ? t('At least 0.5 CPU core is required per worker.')
         : t('No workers are connected.'),
@@ -170,15 +155,7 @@ export function SystemHealthTab({ onSeeRuns }: SystemHealthTabProps) {
         <AlertDescription className="text-pretty">
           {t(
             'In production setups, we recommend a ratio of about 1 app instance to 10 workers.',
-          )}{' '}
-          <a
-            {...adminControl(AdminControl.HEALTH_PRODUCTION_SETUP_LINK)}
-            href={PRODUCTION_SETUP_LINK}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t('Learn more')}
-          </a>
+          )}
         </AlertDescription>
       </Alert>
       <div className="flex flex-col gap-4">
@@ -260,17 +237,6 @@ function HealthRowItem({ row, loading }: { row: HealthRow; loading: boolean }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
           <span className="text-sm font-medium">{row.title}</span>
-          {row.link && (
-            <a
-              {...adminControl(AdminControl.HEALTH_CHECK_DOCS_LINK)}
-              href={row.link}
-              target="_blank"
-              rel="noreferrer"
-              className="text-gray-11 hover:text-gray-12"
-            >
-              <ExternalLink className="size-3.5" />
-            </a>
-          )}
         </div>
         <div className="text-xs text-gray-11">{row.message}</div>
       </div>
@@ -328,5 +294,4 @@ type HealthRow = {
   icon: React.ReactNode;
   status: Status;
   message: React.ReactNode;
-  link?: string;
 };

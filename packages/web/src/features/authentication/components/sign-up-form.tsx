@@ -1,22 +1,15 @@
 import { ErrorCode, isNil } from '@activepieces/core-utils';
-import {
-  OtpType,
-  ApEdition,
-  ApFlagId,
-  TelemetryEventName,
-} from '@activepieces/shared';
+import { OtpType, TelemetryEventName } from '@activepieces/shared';
 import { t } from 'i18next';
 import { Eye, EyeOff } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useTelemetry } from '@/components/providers/telemetry-provider';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormMessage,
@@ -35,7 +28,6 @@ import {
   PasswordRequirementsList,
   PasswordStrengthBolt,
 } from '@/features/authentication/components/password-validator';
-import { flagsHooks } from '@/hooks/flags-hooks';
 import { acquisitionUtils } from '@/lib/acquisition-utils';
 import { api } from '@/lib/api';
 import { authenticationSession } from '@/lib/authentication-session';
@@ -73,32 +65,6 @@ const SignUpForm = ({
       email: searchParams.get('email') || '',
     },
   });
-  const websiteName = flagsHooks.useWebsiteBranding()?.websiteName;
-  const { data: edition } = flagsHooks.useFlag<ApEdition>(ApFlagId.EDITION);
-  const showNewsLetterCheckbox = useMemo(() => {
-    if (!edition || !websiteName) {
-      return false;
-    }
-    switch (edition) {
-      case ApEdition.CLOUD: {
-        if (
-          typeof websiteName === 'string' &&
-          websiteName.toLowerCase() === 'activepieces'
-        ) {
-          form.setValue('newsLetter', true);
-          return true;
-        }
-        return false;
-      }
-      case ApEdition.ENTERPRISE:
-        return false;
-      case ApEdition.COMMUNITY: {
-        form.setValue('newsLetter', true);
-        return true;
-      }
-    }
-  }, [edition, websiteName]);
-
   const redirectAfterLogin = useRedirectAfterLogin();
   const navigate = useNavigate();
   const { capture } = useTelemetry();
@@ -368,29 +334,6 @@ const SignUpForm = ({
               </FormItem>
             )}
           />
-          {showNewsLetterCheckbox && (
-            <FormField
-              control={form.control}
-              name="newsLetter"
-              render={({ field }) => (
-                <FormItem className="flex items-center gap-2 ">
-                  <FormControl>
-                    <Checkbox
-                      id="newsLetter"
-                      className="m-0!"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    ></Checkbox>
-                  </FormControl>
-                  <Label htmlFor="newsLetter" className="text-xs">
-                    {t(`Get emails about updates and newsletters`)}
-                  </Label>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
           {form?.formState?.errors?.root?.serverError && (
             <FormMessage>
               {form.formState.errors.root.serverError.message}

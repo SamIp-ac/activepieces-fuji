@@ -51,7 +51,7 @@ export const PLATFORM_FEATURES = {
   apiKeys: {
     featureKey: 'API',
     title: 'Enable API Keys',
-    description: 'Create and manage API keys to access Activepieces APIs.',
+    description: 'Create and manage API keys to access Fuji APIs.',
     tier: 'team',
     bullets: [
       'Drive projects, flows and connections from your own tooling',

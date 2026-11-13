@@ -11,7 +11,6 @@ import { DataTableInputPopover } from '@/components/custom/data-table/data-table
 import { LockedAlert } from '@/components/custom/locked-alert';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { RequestTrial } from '@/features/billing';
 import { pieceSetQueries } from '@/features/piece-sets';
 import { PieceIcon, piecesHooks } from '@/features/pieces';
 import { projectCollectionUtils } from '@/features/projects';
@@ -109,12 +108,6 @@ const PiecesSettings = () => {
           description={t(
             "Show the pieces that matter most to your users and hide the ones you don't like.",
           )}
-          button={
-            <RequestTrial
-              featureKey="ENTERPRISE_PIECES"
-              buttonVariant="basic"
-            />
-          }
         />
       )}
       {platform.plan.managePiecesEnabled && (

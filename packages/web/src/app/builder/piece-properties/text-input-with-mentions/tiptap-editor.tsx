@@ -43,10 +43,7 @@ import {
   ActiveFunctionInfo,
   FunctionEditorTooltip,
 } from './components/function-hover-popover';
-import {
-  DEFAULT_FORMULAS_DOCS_URL,
-  FunctionSearchPopover,
-} from './components/function-search-popover';
+import { FunctionSearchPopover } from './components/function-search-popover';
 import {
   FunctionStartNode,
   FunctionEndNode,
@@ -651,9 +648,7 @@ export const TiptapEditor = ({
           onSelect={handleFunctionSelect}
           onClose={closeSlash}
           docsUrl={
-            embedState.isEmbedded
-              ? embedState.formulasDocsUrl
-              : DEFAULT_FORMULAS_DOCS_URL
+            embedState.isEmbedded ? embedState.formulasDocsUrl : undefined
           }
         />
       )}

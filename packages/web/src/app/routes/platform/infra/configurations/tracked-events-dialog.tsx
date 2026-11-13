@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { ExternalLinkIcon, List } from 'lucide-react';
+import { List } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -17,9 +17,6 @@ import {
   trackedEventsCatalog,
   TrackedEventGroup,
 } from './tracked-events-catalog';
-
-const TELEMETRY_DOCS_URL =
-  'https://www.activepieces.com/docs/install/configure-operate/telemetry';
 
 export const TrackedEventsDialog = () => {
   const groups = trackedEventsCatalog.buildGroups();
@@ -51,18 +48,7 @@ export const TrackedEventsDialog = () => {
         <DialogFooter
           className="items-center sm:justify-between"
           showCloseButton
-        >
-          <a
-            {...adminControl(AdminControl.TELEMETRY_DOCS_LINK)}
-            href={TELEMETRY_DOCS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-gray-11 underline-offset-4 hover:text-gray-12 hover:underline"
-          >
-            {t('Read the telemetry docs')}
-            <ExternalLinkIcon className="size-3.5" />
-          </a>
-        </DialogFooter>
+        />
       </DialogContent>
     </Dialog>
   );

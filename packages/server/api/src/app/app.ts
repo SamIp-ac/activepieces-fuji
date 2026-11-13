@@ -148,12 +148,6 @@ export const setupApp = async (app: FastifyInstance): Promise<FastifyInstance> =
         transformObject: jsonSchemaTransformObject,
         openapi: {
             openapi: '3.1.0',
-            servers: [
-                {
-                    url: 'https://cloud.activepieces.com/api',
-                    description: 'Production Server',
-                },
-            ],
             components: {
                 securitySchemes: {
                     apiKey: {
@@ -167,12 +161,8 @@ export const setupApp = async (app: FastifyInstance): Promise<FastifyInstance> =
                 },
             },
             info: {
-                title: 'Activepieces Documentation',
+                title: 'Fuji API Documentation',
                 version: '0.0.0',
-            },
-            externalDocs: {
-                url: 'https://www.activepieces.com/docs',
-                description: 'Find more info here',
             },
         },
     })

@@ -21,9 +21,7 @@ export function PlanFeatureSample({
       title={teaser.title}
       description={teaser.description}
       tier={teaser.tier}
-      documentationUrl={teaser.documentationUrl}
       featureKey={teaser.featureKey}
-      showContactSales={teaser.showContactSales}
     >
       {children}
     </FeatureSample>
@@ -94,7 +92,7 @@ const PLAN_FEATURE_SAMPLES: Record<PlanFeature, PlanFeatureSampleSpec> = {
     teaser: {
       featureKey: 'API',
       title: 'Enable API Keys',
-      description: 'Create and manage API keys to access Activepieces APIs.',
+      description: 'Create and manage API keys to access Fuji APIs.',
       tier: 'team',
     },
   },
@@ -125,8 +123,6 @@ const PLAN_FEATURE_SAMPLES: Record<PlanFeature, PlanFeatureSampleSpec> = {
       description:
         'Stream every audit event in OpenTelemetry (OTLP) format to Datadog, PostHog, Grafana Loki, or any OTLP backend. Or send it as raw JSON to a webhook or a handler flow.',
       tier: 'enterprise',
-      documentationUrl:
-        'https://www.activepieces.com/docs/admin-guide/guides/event-streaming',
     },
   },
   aiProviders: {

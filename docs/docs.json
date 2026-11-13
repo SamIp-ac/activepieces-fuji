@@ -1,7 +1,7 @@
 {
    "$schema": "https://mintlify.com/docs.json",
    "theme": "mint",
-   "name": "Activepieces",
+   "name": "Fuji",
    "colors": {
       "primary": "#9675FF",
       "light": "#9675FF",
@@ -12,17 +12,8 @@
          {
             "label": "GitHub",
             "href": "https://github.com/activepieces/activepieces"
-         },
-         {
-            "label": "Pieces",
-            "href": "https://www.activepieces.com/pieces"
          }
-      ],
-      "primary": {
-         "type": "button",
-         "label": "Sign Up",
-         "href": "https://cloud.activepieces.com/sign-up"
-      }
+      ]
    },
    "redirects": [
       {

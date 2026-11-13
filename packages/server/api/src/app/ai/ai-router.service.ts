@@ -64,7 +64,7 @@ async function pickProvider({ platformId, projectId, log }: { platformId: string
     if (isNil(provider)) {
         throw new ActivepiecesError({
             code: ErrorCode.FEATURE_DISABLED,
-            params: { message: 'The AI Router needs an OpenRouter key. On Cloud that is the Activepieces provider; self-hosted, add OpenRouter under AI providers.' },
+            params: { message: 'The AI Router needs an OpenRouter key. On Cloud that is the Fuji provider; self-hosted, add OpenRouter under AI providers.' },
         })
     }
     return provider

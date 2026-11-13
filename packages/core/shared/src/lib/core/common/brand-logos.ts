@@ -1,5 +1,5 @@
 export const DEFAULT_BRAND_LOGOS = {
-    fullLogoUrl: 'https://cdn.activepieces.com/brand/full-logo.png',
-    favIconUrl: 'https://cdn.activepieces.com/brand/logo.svg',
-    logoIconUrl: 'https://cdn.activepieces.com/brand/logo.svg',
+    fullLogoUrl: '/logo-full.svg',
+    favIconUrl: '/logo.svg',
+    logoIconUrl: '/logo.svg',
 } as const

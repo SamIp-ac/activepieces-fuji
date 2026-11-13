@@ -34,19 +34,7 @@ export const apVersionUtil = {
         return readCurrentRelease()
     },
     async getLatestRelease(): Promise<string> {
-        try {
-            const response = await fetch(
-                'https://raw.githubusercontent.com/activepieces/activepieces/main/package.json',
-                {
-                    signal: AbortSignal.timeout(5000),
-                },
-            )
-            const data = await response.json() as PackageJson
-            return data.version
-        }
-        catch (ex) {
-            return UNKNOWN_VERSION
-        }
+        return UNKNOWN_VERSION
     },
     //could be null if the other is running on something older than 0.85.0
     versionsAreCompatible({ versionA, versionB }: { versionA: string | undefined, versionB: string | undefined }): boolean {

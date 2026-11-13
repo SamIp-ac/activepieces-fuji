@@ -25,7 +25,6 @@ import { useIsPlatformAdmin } from '@/hooks/authorization-hooks';
 import { flagsHooks } from '@/hooks/flags-hooks';
 import { platformHooks } from '@/hooks/platform-hooks';
 
-import { RequestTrial } from '../components/request-trial';
 import { TIER_LABELS } from '../utils/feature-tier';
 import { PLATFORM_FEATURES } from '../utils/platform-features';
 
@@ -128,12 +127,7 @@ function TeamProjectLimitContent({
             <Button type="button" variant="outline" onClick={onClose}>
               {t('Cancel')}
             </Button>
-            {isCommunity ? (
-              <RequestTrial
-                featureKey={feature.featureKey}
-                surface={PlatformAdminSurface.LIMIT}
-              />
-            ) : (
+            {!isCommunity && (
               <Button
                 type="button"
                 onClick={() => {

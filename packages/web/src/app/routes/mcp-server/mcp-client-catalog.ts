@@ -59,19 +59,6 @@ function mcpServersJson({
   return prettyJson({ mcpServers: { [slug]: serverConfig } });
 }
 
-const CLOUD_LISTINGS = {
-  claude: 'https://claude.ai/directory/cloud-activepieces-com',
-  cursor:
-    'https://cursor.directory/plugins/activepieces-mcp-connector-for-cursor',
-};
-
-const SELF_HOSTED_SETUP_VIDEOS = {
-  claude:
-    'https://cdn.activepieces.com/videos/mcp-tutorials/Claude%20MCP%20-%20Step%201.mp4',
-  chatgpt:
-    'https://cdn.activepieces.com/videos/mcp-tutorials/ChatGPT%20MCP%20-%20Step%201.mp4',
-};
-
 function catalogEntries({
   url,
   brand: { name, slug },
@@ -170,7 +157,6 @@ function catalogEntries({
           href: cursorDeepLink({ serverUrl: url, slug }),
         },
       },
-      cloud: { docsUrl: CLOUD_LISTINGS.cursor },
       config: {
         path: '~/.cursor/mcp.json',
         snippet: mcpServersJson({ slug, serverConfig: { url } }),
@@ -201,7 +187,6 @@ function catalogEntries({
       ...MCP_CLIENT_BRANDING.claude,
       group: 'chat',
       setupHint: t('Add a connector'),
-      selfHostedVideoUrl: SELF_HOSTED_SETUP_VIDEOS.claude,
       docsUrl:
         'https://support.claude.com/en/articles/11175166-getting-started-with-custom-connectors-using-remote-mcp',
       install: {
@@ -214,25 +199,12 @@ function catalogEntries({
           requiresInternetReachableUrl: true,
         },
       },
-      cloud: {
-        docsUrl: CLOUD_LISTINGS.claude,
-        install: {
-          body: t(
-            'This server is already listed in Claude’s directory — add it there in one click.',
-          ),
-          action: {
-            label: t('Add from the Claude directory'),
-            href: CLOUD_LISTINGS.claude,
-          },
-        },
-      },
     },
     {
       key: 'chatgpt',
       ...MCP_CLIENT_BRANDING.chatgpt,
       group: 'chat',
       setupHint: t('Add a connector'),
-      selfHostedVideoUrl: SELF_HOSTED_SETUP_VIDEOS.chatgpt,
       docsUrl: 'https://platform.openai.com/docs/mcp',
       install: {
         body: t(

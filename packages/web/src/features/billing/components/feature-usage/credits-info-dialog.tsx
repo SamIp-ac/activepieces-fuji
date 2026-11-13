@@ -73,13 +73,13 @@ export const CreditsInfoDialog = () => {
 };
 
 function CreditsCostTable({
-  includeActivepiecesModels,
+  includeFujiModels,
   chatEnabled,
 }: {
-  includeActivepiecesModels: boolean;
+  includeFujiModels: boolean;
   chatEnabled: boolean;
 }) {
-  const items = buildCostItems({ includeActivepiecesModels, chatEnabled });
+  const items = buildCostItems({ includeFujiModels, chatEnabled });
   return (
     <div className="flex w-full flex-col overflow-hidden rounded-[10px] border">
       <div className="flex items-center gap-2 border-b px-3 py-2.5 text-sm font-medium text-gray-11">
@@ -124,13 +124,13 @@ function CreditsCostTable({
 }
 
 function buildCostItems({
-  includeActivepiecesModels,
+  includeFujiModels,
   chatEnabled,
 }: {
-  includeActivepiecesModels: boolean;
+  includeFujiModels: boolean;
   chatEnabled: boolean;
 }): CostItem[] {
-  const modelByActivepieces = t('Model by Activepieces');
+  const modelByFuji = t('Model by Fuji');
   const execution: CostItem[] = [
     { kind: 'section', label: t('Execution') },
     { kind: 'row', action: t('Flow run'), credits: '1' },
@@ -153,7 +153,7 @@ function buildCostItems({
     {
       kind: 'row',
       action: t('AI step'),
-      sub: t('Activepieces AI — non 3rd-party ai i.e OpenAI'),
+      sub: t('Fuji AI — non 3rd-party ai i.e OpenAI'),
       credits: t('see below'),
     },
     {
@@ -163,19 +163,19 @@ function buildCostItems({
       credits: t('see below'),
     },
   ];
-  const activepiecesModels: CostItem[] = includeActivepiecesModels
+  const fujiModels: CostItem[] = includeFujiModels
     ? [
         {
           kind: 'row',
-          action: t('Activepieces AI'),
-          sub: modelByActivepieces,
+          action: t('Fuji AI'),
+          sub: modelByFuji,
           credits: t('what the call costs'),
         },
       ]
     : [];
   const ai: CostItem[] = [
     { kind: 'section', label: t('AI Steps (per call)') },
-    ...activepiecesModels,
+    ...fujiModels,
     {
       kind: 'row',
       action: t('BYOK'),
@@ -197,16 +197,16 @@ function buildFaqs({
     {
       question: t('What are credits?'),
       answer: t(
-        'Credits are the unit used to measure your usage on Activepieces. Every action you run consumes a certain number of credits depending on what it does.',
+        'Credits are the unit used to measure your usage on Fuji. Every action you run consumes a certain number of credits depending on what it does.',
       ),
     },
     {
       question: t('How are credits consumed?'),
       answer: (
         <div className="flex flex-col gap-2.5">
-          <span>{t("Here's what each action in Activepieces costs:")}</span>
+          <span>{t("Here's what each action in Fuji costs:")}</span>
           <CreditsCostTable
-            includeActivepiecesModels={isCloud}
+            includeFujiModels={isCloud}
             chatEnabled={chatEnabled}
           />
         </div>
@@ -215,7 +215,7 @@ function buildFaqs({
     {
       question: t('What is BYOK?'),
       answer: t(
-        'BYOK stands for Bring Your Own Key. You connect your own AI provider API key, and Activepieces charges only 1 credit per call instead of the full model cost.',
+        'BYOK stands for Bring Your Own Key. You connect your own AI provider API key, and Fuji charges only 1 credit per call instead of the full model cost.',
       ),
     },
     {

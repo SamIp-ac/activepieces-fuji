@@ -10,7 +10,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { VirtualizedList } from '@/components/ui/virtualized-list';
-import { RequestTrial } from '@/features/billing';
 import { pieceSetQueries } from '@/features/piece-sets';
 import { piecesHooks } from '@/features/pieces/hooks/pieces-hooks';
 import { useIsPlatformAdmin } from '@/hooks/authorization-hooks';
@@ -192,9 +191,6 @@ function PieceSetBanner({ projectId }: { projectId: string | null }) {
         description={t(
           'Every piece below is reachable by any connected client. Restricting the list to a chosen set is an enterprise feature.',
         )}
-        button={
-          <RequestTrial featureKey="ENTERPRISE_PIECES" buttonVariant="basic" />
-        }
       />
     );
   }

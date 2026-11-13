@@ -4,7 +4,7 @@ import {
   PlatformAdminSurface,
 } from '@activepieces/shared';
 import { t } from 'i18next';
-import { Check, Crown, ExternalLink } from 'lucide-react';
+import { Check, Crown } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -18,10 +18,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { flagsHooks } from '@/hooks/flags-hooks';
-import { AdminControl, adminControl } from '@/lib/admin-control';
 
-import { FeatureKey } from '../components/request-trial';
-import { FeatureTier, TIER_LABELS } from '../utils/feature-tier';
+import { FeatureKey, FeatureTier, TIER_LABELS } from '../utils/feature-tier';
 
 import { useUpgradeClick } from './use-upgrade-click';
 
@@ -47,13 +45,11 @@ export function UpgradeFeatureDialog({
   description,
   bullets,
   tier,
-  documentationUrl,
   featureKey,
 }: UpgradeFeatureDialogProps) {
   const upgradeClick = useUpgradeClick();
   const { data: edition } = flagsHooks.useFlag<ApEdition>(ApFlagId.EDITION);
   const isCommunity = edition === ApEdition.COMMUNITY;
-  const docsUrl = documentationUrl ?? ENTERPRISE_DOCUMENTATION_URL;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -84,18 +80,7 @@ export function UpgradeFeatureDialog({
         )}
 
         <DialogFooter className="sm:justify-start">
-          {isCommunity ? (
-            <a
-              {...adminControl(AdminControl.PLAN_DIALOG_LINK)}
-              href={docsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm font-medium text-accent-11 hover:underline"
-            >
-              {t('Read the docs')}
-              <ExternalLink className="size-3.5" />
-            </a>
-          ) : (
+          {!isCommunity && (
             <Button
               onClick={() => {
                 onOpenChange(false);
@@ -115,16 +100,12 @@ export function UpgradeFeatureDialog({
   );
 }
 
-const ENTERPRISE_DOCUMENTATION_URL =
-  'https://www.activepieces.com/docs/install/configuration/overview#enterprise-edition-optional';
-
 export type PlatformFeature = {
   featureKey: FeatureKey;
   title: string;
   description: string;
   bullets?: string[];
   tier?: FeatureTier;
-  documentationUrl?: string;
   videoUrl?: string;
 };
 

@@ -116,7 +116,7 @@ function eventDestinations(): EventDestination[] {
       format: EventDestinationFormat.OTLP_JSON,
     },
     {
-      url: 'https://siem.acme.com/hooks/activepieces',
+      url: 'https://siem.acme.com/hooks/fuji',
       format: EventDestinationFormat.RAW,
     },
   ].map(({ url, format }, index) => ({

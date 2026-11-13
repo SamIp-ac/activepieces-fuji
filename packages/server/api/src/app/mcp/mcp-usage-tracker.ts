@@ -73,7 +73,7 @@ async function refusalWhenOutOfCredits({ platformId, toolName, log }: RefusalPar
         return null
     }
     return {
-        content: [{ type: 'text', text: `❌ Out of credits: this platform has used all of its Activepieces credits, so "${toolName}" cannot run. Add credits or upgrade the plan, then try again.` }],
+        content: [{ type: 'text', text: `❌ Out of credits: this platform has used all of its Fuji credits, so "${toolName}" cannot run. Add credits or upgrade the plan, then try again.` }],
         isError: true,
     }
 }

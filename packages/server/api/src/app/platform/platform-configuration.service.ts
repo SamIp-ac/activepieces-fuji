@@ -58,7 +58,7 @@ export const platformConfigurationService = (log: FastifyBaseLogger) => ({
         if (system.getEdition() === ApEdition.CLOUD) {
             return projectIds
         }
-        const fallback = system.getBoolean(AppSystemProp.TELEMETRY_ENABLED) ?? true
+        const fallback = system.getBoolean(AppSystemProp.TELEMETRY_ENABLED) ?? false
         const enabled: string[] = []
         for (const batch of chunk(projectIds, CONFIGURATION_FILTER_BATCH_SIZE)) {
             const rows: { id: string }[] = await platformConfigurationRepo().manager

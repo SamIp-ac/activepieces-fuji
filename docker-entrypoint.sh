@@ -28,7 +28,7 @@ fi
 APP_SCRIPT="packages/server/api/dist/src/bootstrap.js"
 WORKER_SCRIPT="packages/server/worker/dist/src/bootstrap.js"
 
-echo "Starting Activepieces (${AP_CONTAINER_TYPE} mode)"
+echo "Starting Fuji (${AP_CONTAINER_TYPE} mode)"
 
 case "$AP_CONTAINER_TYPE" in
     APP)

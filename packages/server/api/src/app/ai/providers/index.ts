@@ -32,9 +32,8 @@ export const aiProviders: Record<AIProviderName, AIProviderStrategy<AIProviderAu
     [AIProviderName.MOONSHOT]: openAiCompatibleVendor({ name: 'Moonshot AI', provider: AIProviderName.MOONSHOT }),
     [AIProviderName.ACTIVEPIECES]: {
         ...openRouterProvider,
-        name: 'Activepieces',
+        name: 'Fuji',
         async validateConnection(_authConfig, _config, _log): Promise<void> {
-            // Activepieces provider is managed internally, no external validation needed
         },
     },
 }

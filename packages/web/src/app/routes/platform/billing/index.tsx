@@ -49,11 +49,6 @@ export function BillingPlanTab() {
               <h1 className="text-xl font-medium">
                 {t('Billing & subscription')}
               </h1>
-              <div className="text-sm text-gray-11">
-                {t(
-                  'For questions about billing contact us at support@activepieces.com',
-                )}
-              </div>
             </div>
             <BillingRefreshButton />
           </div>

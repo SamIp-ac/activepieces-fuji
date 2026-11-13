@@ -261,6 +261,3 @@ export function FunctionSearchPopover({
     document.body,
   );
 }
-
-export const DEFAULT_FORMULAS_DOCS_URL =
-  'https://www.activepieces.com/docs/flows/using-formulas';

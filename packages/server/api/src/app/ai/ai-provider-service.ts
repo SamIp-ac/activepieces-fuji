@@ -426,7 +426,7 @@ async function ensureManagedProviderRow({ platformId }: { platformId: PlatformId
             auth: await encryptUtils.encryptObject({}),
             config: {},
             provider: AIProviderName.ACTIVEPIECES,
-            displayName: 'Activepieces',
+            displayName: 'Fuji',
             platformId,
             modelScope: 'all',
             modelIds: [],

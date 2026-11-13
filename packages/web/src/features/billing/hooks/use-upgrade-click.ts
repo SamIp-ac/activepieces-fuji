@@ -2,8 +2,7 @@ import { PlatformAdminSurface, TelemetryEventName } from '@activepieces/shared';
 
 import { useTelemetry } from '@/components/providers/telemetry-provider';
 
-import { FeatureKey } from '../components/request-trial';
-import { FeatureTier } from '../utils/feature-tier';
+import { FeatureKey, FeatureTier } from '../utils/feature-tier';
 
 import { billingDialogHooks } from './billing-dialog-hooks';
 

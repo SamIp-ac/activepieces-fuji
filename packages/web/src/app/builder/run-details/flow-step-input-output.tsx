@@ -350,15 +350,7 @@ const TruncatedInputNotice = () => (
     <span>
       {t(
         'Some input values were too large to keep in the run logs and are shown as truncated. The step ran with the full values.',
-      )}{' '}
-      <a
-        href="https://www.activepieces.com/docs/install/troubleshooting/truncated-logs"
-        target="_blank"
-        rel="noreferrer"
-        className="text-accent-11 underline"
-      >
-        {t('Learn more')}
-      </a>
+      )}
     </span>
   </div>
 );

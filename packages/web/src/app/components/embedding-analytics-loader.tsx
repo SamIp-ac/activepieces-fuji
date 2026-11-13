@@ -43,12 +43,12 @@ function loadIfValid({
     return;
   }
   if (!pattern.test(id)) {
-    console.warn(`Activepieces embed: ignoring invalid ${name}`, id);
+    console.warn(`Fuji embed: ignoring invalid ${name}`, id);
     return;
   }
   const { error } = tryCatchSync(() => load({ id }));
   if (error) {
-    console.warn(`Activepieces embed: failed to load ${name}`, error);
+    console.warn(`Fuji embed: failed to load ${name}`, error);
   }
 }
 
@@ -91,7 +91,7 @@ function appendScript({ src, name }: { src: string; name: string }) {
   script.src = src;
   script.addEventListener('error', () => {
     script.remove();
-    console.warn(`Activepieces embed: ${name} failed to load`, src);
+    console.warn(`Fuji embed: ${name} failed to load`, src);
   });
   document.head.appendChild(script);
 }

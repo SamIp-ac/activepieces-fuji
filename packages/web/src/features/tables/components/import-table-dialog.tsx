@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { CopyButton } from '@/components/custom/clipboard/copy-button';
 import { ApMarkdown } from '@/components/custom/markdown';
-import { useEmbedding } from '@/components/providers/embed-provider';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -96,7 +95,6 @@ const ImportTableForm = ({
   const maxRecords =
     flagsHooks.useFlag<number>(ApFlagId.MAX_RECORDS_PER_TABLE).data ?? 1000;
   const tableStore = useOptionalTableStore();
-  const isEmbedded = useEmbedding().embedState.isEmbedded;
   const allowedFileTypes: SupportedFileType[] =
     tableId && tableStore ? ['json', 'csv'] : ['json'];
 
@@ -122,8 +120,6 @@ const ImportTableForm = ({
   const file = form.watch('file');
   const fileType = file ? fileUtils.getExtension(file.name) : null;
   const serverError = form.formState.errors.root?.serverError?.message;
-  const showTemplateDocsLink =
-    fileType === 'json' && !isNil(form.formState.errors.file) && !isEmbedded;
 
   const getFileError = async (file: File | undefined) => {
     if (isNil(file)) {
@@ -330,16 +326,6 @@ const ImportTableForm = ({
                 />
               </FormControl>
               <FormMessage />
-              {showTemplateDocsLink && (
-                <a
-                  href={TABLE_TEMPLATE_DOCS_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sm text-accent-11 underline"
-                >
-                  {t('See the template format')}
-                </a>
-              )}
             </FormItem>
           )}
         />
@@ -423,9 +409,6 @@ async function readJsonTemplate(file: File): Promise<SharedTemplate | null> {
     status: content.status,
   };
 }
-
-const TABLE_TEMPLATE_DOCS_URL =
-  'https://www.activepieces.com/docs/tables/import-export#importing-a-json-template';
 
 ImportTableDialog.displayName = 'ImportTableDialog';
 export { ImportTableDialog };

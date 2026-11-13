@@ -50,14 +50,14 @@ type AIModelSelectorProps = {
   }) => void;
 };
 
-const ACTIVEPIECES_PROVIDER_CONFIG = {
+const FUJI_PROVIDER_CONFIG = {
   provider: AIProviderName.ACTIVEPIECES,
-  name: 'Activepieces',
+  name: 'Fuji',
   markdown: '',
-  logoUrl: 'https://cdn.activepieces.com/pieces/activepieces.png',
+  logoUrl: '/logo.svg',
 };
 
-const ALL_PROVIDERS = [...SUPPORTED_AI_PROVIDERS, ACTIVEPIECES_PROVIDER_CONFIG];
+const ALL_PROVIDERS = [...SUPPORTED_AI_PROVIDERS, FUJI_PROVIDER_CONFIG];
 
 export function AIModelSelector({
   hideLabel,

@@ -87,7 +87,7 @@ function assertMcpUrlHasDistinctHost(): void {
     if (sameHost && !sameBaseUrl) {
         throw new Error(JSON.stringify({
             message: 'AP_MCP_URL and AP_FRONTEND_URL share a hostname but are not the same URL, so the server cannot tell requests for one from the other. Give AP_MCP_URL its own hostname, or leave it unset.',
-            docUrl: 'https://www.activepieces.com/docs/install/configuration/environment-variables',
+            docUrl: '',
         }))
     }
 }
@@ -306,7 +306,7 @@ export const validateEnvPropsOnStartup = async (log: FastifyBaseLogger): Promise
             throw new Error(JSON.stringify({
                 error: inspect(error),
                 message: 'S3 validation failed. Check your configuration and credentials.',
-                docUrl: 'https://www.activepieces.com/docs/install/configuration/overview#configure-s3-optional',
+                docUrl: '',
             }))
         }
     }
@@ -322,7 +322,7 @@ export const validateEnvPropsOnStartup = async (log: FastifyBaseLogger): Promise
     if (!isNil(codeSandboxType)) {
         throw new Error(JSON.stringify({
             message: 'AP_CODE_SANDBOX_TYPE is deprecated, please use AP_EXECUTION_MODE instead',
-            docUrl: 'https://www.activepieces.com/docs/install/configuration/overview',
+            docUrl: '',
         }))
     }
     const encryptionKey = await encryptUtils.getEncryptionKey()
@@ -330,7 +330,7 @@ export const validateEnvPropsOnStartup = async (log: FastifyBaseLogger): Promise
     if (!isValidHexKey) {
         throw new Error(JSON.stringify({
             message: 'AP_ENCRYPTION_KEY is missing or invalid. It must be a 32-character hexadecimal string (representing 16 bytes). You can generate one using the command: `openssl rand -hex 16`',
-            docUrl: 'https://www.activepieces.com/docs/install/configuration/environment-variables',
+            docUrl: '',
         }))
     }
     const isApp = system.isApp()
@@ -348,7 +348,7 @@ export const validateEnvPropsOnStartup = async (log: FastifyBaseLogger): Promise
     if (isNil(jwtSecret)) {
         throw new Error(JSON.stringify({
             message: 'AP_JWT_SECRET is undefined, please define it in the environment variables',
-            docUrl: 'https://www.activepieces.com/docs/install/configuration/environment-variables',
+            docUrl: '',
         }))
     }
 
@@ -358,7 +358,7 @@ export const validateEnvPropsOnStartup = async (log: FastifyBaseLogger): Promise
         if (![ExecutionMode.SANDBOX_PROCESS, ExecutionMode.SANDBOX_CODE_ONLY, ExecutionMode.SANDBOX_CODE_AND_PROCESS].includes(executionMode)) {
             throw new Error(JSON.stringify({
                 message: `Execution mode ${executionMode} is no longer supported in this edition, check the documentation for recent changes`,
-                docUrl: 'https://www.activepieces.com/docs/install/configuration/overview',
+                docUrl: '',
             }))
         }
     }

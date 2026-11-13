@@ -6,7 +6,6 @@ import { formatUtils } from '@/lib/format-utils';
 
 const FREE_PLAN_ID = 'free';
 const ANNUAL_INTERVAL = 'year';
-const SALES_URL = 'https://www.activepieces.com/sales?ap_cta=app_plan_selector';
 
 function stripPlanInterval(name: string): string {
   return name.replace(/\s*\((annual|monthly|yearly)\)\s*/i, '').trim();
@@ -189,7 +188,7 @@ function planCatalog(): PlanCatalogEntry[] {
         {
           label: t('MCPs and API access'),
           tooltip: t(
-            'Serve your tools to any AI assistant over MCP, and manage Activepieces from your own code over the API.',
+            'Serve your tools to any AI assistant over MCP, and manage Fuji from your own code over the API.',
           ),
         },
       ],
@@ -333,7 +332,6 @@ export const planSelectorUtils = {
   creditTopUpFeature,
   FREE_PLAN_ID,
   ANNUAL_INTERVAL,
-  SALES_URL,
 };
 
 export const DROP_TO_FREE_WARNING =

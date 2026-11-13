@@ -26,7 +26,6 @@ import { authenticationSession } from '@/lib/authentication-session';
 import { cn } from '@/lib/utils';
 
 import { AccountSettingsDialog } from '../account-settings';
-import { HelpAndFeedback } from '../help-and-feedback';
 
 export function SidebarUser() {
   const [accountSettingsOpen, setAccountSettingsOpen] = useState(false);
@@ -102,12 +101,10 @@ export function SidebarUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => setAccountSettingsOpen(true)}>
+            <DropdownMenuItem onClick={() => setAccountSettingsOpen(true)}>
                 <UserCogIcon className="w-4 h-4 mr-2" />
                 {t('Account Settings')}
-              </DropdownMenuItem>
-
-              <HelpAndFeedback />
+            </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>

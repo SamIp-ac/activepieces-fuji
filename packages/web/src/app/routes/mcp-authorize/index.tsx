@@ -188,7 +188,7 @@ function McpAuthorizePage() {
           </CardTitle>
           <CardDescription>
             <span className="font-semibold text-gray-12">{clientName}</span>{' '}
-            {t('wants to connect to your Activepieces account')}
+            {t('wants to connect to your Fuji account')}
           </CardDescription>
           {currentUser && (
             <p className="text-sm text-gray-11">

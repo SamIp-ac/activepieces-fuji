@@ -72,7 +72,6 @@ import { cn } from '@/lib/utils';
 import { AccountSettingsDialog } from '../account-settings';
 import { recordAccess } from '../global-search/access-history';
 import { useGlobalSearch } from '../global-search/global-search-context';
-import { HelpAndFeedback } from '../help-and-feedback';
 import { mcpHooks } from '../project-settings/mcp-server/utils/mcp-hooks';
 
 export function PrimaryRail() {
@@ -762,7 +761,6 @@ function RailAccountRow({ collapsed }: { collapsed: boolean }) {
               <UserCogIcon className="w-4 h-4 mr-2" />
               {t('Account Settings')}
             </DropdownMenuItem>
-            <HelpAndFeedback />
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>

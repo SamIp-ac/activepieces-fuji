@@ -149,7 +149,7 @@ function assertManagedModelAllowed({ provider, modelId, image, adminChosenModelI
     if (provider !== AIProviderName.ACTIVEPIECES || allowed.includes(modelId)) {
         return
     }
-    const message = `The model "${modelId}" is not available on Activepieces AI credits. Choose one of the listed models or connect your own AI provider key.`
+    const message = `The model "${modelId}" is not available on Fuji AI credits. Choose one of the listed models or connect your own AI provider key.`
     throw new ActivepiecesError({
         code: ErrorCode.VALIDATION,
         params: { message },

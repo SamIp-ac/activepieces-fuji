@@ -1,39 +1,22 @@
 import { ApEdition, ApFlagId } from '@activepieces/shared';
 import { t } from 'i18next';
-import { ExternalLink } from 'lucide-react';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { billingDialogHooks } from '@/features/billing';
 import { flagsHooks } from '@/hooks/flags-hooks';
 import { AdminControl, adminControl } from '@/lib/admin-control';
 
-export function FeatureBanner({
-  message,
-  documentationUrl,
-  className,
-}: FeatureBannerProps) {
+export function FeatureBanner({ message, className }: FeatureBannerProps) {
   const { openDialog: openManagePlanDialog } =
     billingDialogHooks.useManagePlanDialogStore();
   const { data: edition } = flagsHooks.useFlag<ApEdition>(ApFlagId.EDITION);
   const isCommunity = edition === ApEdition.COMMUNITY;
-  const docsUrl = documentationUrl ?? ENTERPRISE_DOCUMENTATION_URL;
 
   return (
     <Alert variant="primary" className={className}>
       <AlertDescription className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <span>{message}</span>
-        {isCommunity ? (
-          <a
-            {...adminControl(AdminControl.PLAN_BANNER_LINK)}
-            href={docsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 font-medium text-accent-11 hover:underline"
-          >
-            {t('Read the docs')}
-            <ExternalLink className="size-3.5" />
-          </a>
-        ) : (
+        {!isCommunity && (
           <button
             {...adminControl(AdminControl.PLAN_BANNER_OPEN)}
             type="button"
@@ -48,11 +31,7 @@ export function FeatureBanner({
   );
 }
 
-const ENTERPRISE_DOCUMENTATION_URL =
-  'https://www.activepieces.com/docs/install/configuration/overview#enterprise-edition-optional';
-
 export type FeatureBannerProps = {
   message: string;
-  documentationUrl?: string;
   className?: string;
 };

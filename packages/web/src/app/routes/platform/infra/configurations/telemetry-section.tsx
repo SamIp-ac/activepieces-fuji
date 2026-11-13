@@ -26,7 +26,7 @@ export const TelemetrySection = ({
         <h2 className="text-base font-semibold">{t('Telemetry')}</h2>
         <p className="text-sm text-gray-11">
           {t(
-            'Help us improve Activepieces. We never receive what your flows do, the data they process, or anything inside your connections and API keys.',
+            'Help us improve Fuji. We never receive what your flows do, the data they process, or anything inside your connections and API keys.',
           )}
         </p>
       </div>

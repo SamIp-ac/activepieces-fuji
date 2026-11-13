@@ -419,7 +419,6 @@ const SamlStep = ({
             markdown={t(
               `
 **Setup Instructions**:
-Please check the following documentation: [SAML SSO](https://activepieces.com/docs/security/sso)
 
 **Single sign-on URL**:
 \`\`\`text

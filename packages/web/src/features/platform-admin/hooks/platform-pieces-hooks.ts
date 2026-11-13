@@ -62,9 +62,7 @@ export const platformPiecesMutations = {
       onSuccess: () => {
         pieceCacheUtils.invalidatePieceCaches(queryClient);
         toast.success(t('Pieces synced'), {
-          description: t(
-            'Pieces have been synced from the activepieces cloud.',
-          ),
+          description: t('Pieces have been synced.'),
         });
       },
     });
