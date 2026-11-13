@@ -5,12 +5,7 @@ import {
   SigningKey,
 } from '@activepieces/shared';
 import { t } from 'i18next';
-import {
-  Globe,
-  Key,
-  ListChecks,
-  ShieldCheck,
-} from 'lucide-react';
+import { Globe, Key, ListChecks, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 
 import { DataFetchErrorState } from '@/components/custom/data-fetch-error-state';

@@ -12,7 +12,14 @@ const FujiWordmark = ({ className }: { className?: string }) => (
     xmlns="http://www.w3.org/2000/svg"
   >
     <path d="M2 31 L12 11 L18 21 L23 14 L33 31 Z" fill="#6e41e2" />
-    <text x="40" y="29.5" fontSize="26" fontWeight={700} fill="currentColor" fontFamily="inherit">
+    <text
+      x="40"
+      y="29.5"
+      fontSize="26"
+      fontWeight={700}
+      fill="currentColor"
+      fontFamily="inherit"
+    >
       Fuji
     </text>
   </svg>
