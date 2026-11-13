@@ -168,16 +168,155 @@ provider icons on `cdn.activepieces.com`.
 
 ## 3. Change log
 
-_(filled in during the change phase — each entry: file, what changed)_
+Branch `rebrand` (2 commits: `6c512c71f6` rebrand, `b7833e400c` lint+validator). 116 files changed.
+
+### 3.1 Brand chain (drives title/favicon/sidebar/login/emails/MCP)
+
+- `packages/server/api/src/app/flags/theme.ts` — `defaultTheme` → `websiteName: 'Fuji'`; logo URLs composed from `DEFAULT_BRAND_LOGOS` and made absolute when `AP_FRONTEND_URL` is set (new `withFrontendUrl` helper) so emails and MCP clients get resolvable logos.
+- `packages/core/shared/src/lib/core/common/brand-logos.ts` — defaults now local: `/logo-full.svg`, `/logo.svg` (CDN URLs removed).
+- `packages/web/vite.config.mts` — `AP_TITLE='Fuji'`, `AP_FAVICON='/favicon.ico'`.
+- `packages/core/shared` version `0.201.0 → 0.202.0` (minor: `DEFAULT_BRAND_LOGOS` behavior change; `supportUrl`/`feedbackUrl` exports removed with their files `support-url.ts`/`feedback-url.ts` and barrel lines in `src/index.ts`).
+
+### 3.2 Telemetry / phone-home
+
+- `system.ts` — `AP_TELEMETRY_ENABLED` default `'true'` → `'false'`; `platform-configuration.service.ts` COALESCE fallback `?? true` → `?? false`. (DB column defaults untouched; explicit inserts always set the value. Existing rows flipped by migration, §3.6.)
+- `community-templates.service.ts` — source URL now read from new `AP_TEMPLATES_SOURCE_URL` (added to `system-props.ts` + validator map in `system-validator.ts`); empty ⇒ `list`→`{next:null,previous:null,data:[]}`, `getCategories`→`[]`, `getOrThrow`→404. Templates gallery shows its empty state, no network call. Re-enable by pointing the env at any source implementing the 3-JSON-endpoint contract (self-hosted templates recommended; content from upstream's gallery would re-introduce their branding inside template text).
+- `packages/server/utils/src/ap-version.ts` — `getLatestRelease()` no longer fetches GitHub raw; returns `'0.0.0'`.
+
+### 3.3 Web UI
+
+- Strings rebranded across `credits-info-dialog`, `plan-selector(-utils)`, `platform-features`, `plan-feature-sample`, `api-keys`, `telemetry-section`, `internal-errors-table`, `handler-flow-builder` (author→Fuji), `platform-pieces-hooks` (toast→"Pieces have been synced."), `install-piece-dialog` (link stripped), `conversation-list`, `flow-chat` (bot name), `mcp-authorize` + `embedded-mcp-authorize-dialog`, `connect-git-dialog` (placeholders), `embedding-analytics-loader` (console prefix), `sample-data` (webhook path), `ai-model/index` (provider name Fuji + local logo).
+- Links removed (components keep compiling; unused imports/props cleaned): help menu (`help-and-feedback.tsx` deleted + usages in `primary-rail`, `sidebar-user`), builder-header Support button, no-results Request Piece (`no-results-found.tsx` rewritten), language translate link (`language-toggle.tsx`), truncated-logs/formulas/import-table docs anchors, `system-health-tab` links + `link` prop, workers tabs links, `tracked-events-dialog`, `grants-tab`, embed page read-more, MCP directory/video links (`mcp-client-catalog.ts`), sales CTAs (`request-trial.tsx` deleted; `FeatureKey` type moved to `feature-tier.ts`; `plan-selector`, `use-team-project-limit-guard`, `feature-banner/-sample/-teaser`, `billing-page-shell`, `use-feature-gate` de-linked; `locked-feature-guard`/`locked-alert` props adjusted), billing support email (`platform/billing`, `automatic-trial-activation`).
+- Newsletter opt-in removed from `sign-up-form.tsx` (was default-checked on CE).
+- Privacy/terms: seed entries removed from `flag.service.ts` → signup legal note hidden (renders nothing when flags absent).
+- `saml-dialog.tsx` — docs link stripped; **Audience URI literal `Activepieces` kept** (matches EE `saml-client.ts:95` entityID, untouchable).
+- Wordmark: `activepieces-wordmark.tsx` → `fuji-wordmark.tsx` (mark + "Fuji" text); `show-powered-by.tsx` + `flow-screenshot-utils.ts` canvas twin → Fuji mountain mark, "Built with Fuji".
+- Assets regenerated: `public/logo.svg`, `logo-full.svg`, `logo-192.png`, `logo-180.png`, `favicon.ico` (purple tile `#6e41e2`, white two-peak mark). Orphan PNGs deleted.
+
+### 3.4 Locales (11 languages)
+
+- 15 keys renamed (brand token swap; en value = key; non-en values token-swapped; structurally-changed keys reset to en text): telemetry consent, internal errors, MCP/API blurbs, desktop experience, MCP connect, "Model by Fuji", "Fuji AI —…", "Fuji AI", credits ×3, API keys ×2, pieces-sync toast, install-piece markdown, SAML markdown.
+- 140 keys deleted (usage removed, verified unused against src) incl. help-menu, newsletter, Request Piece, Talk to sales, Contact Sales/Support, See the template format, Read the telemetry docs, How connecting works, Claude directory, billing support email — plus ~26 stale crowdin orphans in `ar`/`ru`.
+- Sole remaining brand hit per locale: the SAML Audience-URI key (justified above).
+
+### 3.5 Server / MCP / OpenAPI
+
+- `mcp-server-builder.ts` — name/title Fuji, websiteUrl = `AP_FRONTEND_URL ?? ''`, icons from local assets; instructions header "## Fuji MCP Server". Brand strings rebranded in `ap-setup-guide`, `piece-expertise`, `mcp-usage-tracker`, `ap-validate-step-config`, `ai-router.service`, `ai-utils`, `knowledge-base.module`.
+- `system-validator.ts` — 6 `docUrl`s emptied (field kept, zero in-repo consumers).
+- `app.ts` — OpenAPI title "Fuji API Documentation"; `servers` and `externalDocs` entries removed (typed optional in @fastify/swagger; absent servers ⇒ relative `/`).
+- AI provider display name → 'Fuji' in `providers/index.ts` + `ai-provider-service.ts` seed (existing rows via migration).
+
+### 3.6 Migration
+
+- `postgres/1867000000000-RebrandDefaultPlatformToFuji.ts` (registered in `postgres-connection.ts`, `breaking=false`, `release='0.93.0'`, reversible `down()`): platform name/logos (WHERE old defaults), THEME flag `websiteName`+logos (jsonb_set, guarded), `ai_provider.displayName`, `platform_configuration.isProductTelemetryEnabled` true→false, `template.author`. Historical migrations untouched.
+
+### 3.7 Packaging
+
+- `docker-compose.yml` — image `fuji:latest` (×2), container/network `fuji`, `README.md` rewritten as fork readme (attribution + MIT + all-contributors kept; hero/badges/discord/crowdin/screenshots removed; install = build from repo), `docs/docs.json` (name Fuji; cloud signup/pieces links removed), `docs/install/options/docker.mdx` + `docker-compose.mdx` (local-build flow, `~/.fuji`), `deploy/activepieces-helm/values.yaml`, `deploy/pulumi/Pulumi.yaml`, `tools/update.sh`, `docker-entrypoint.sh` startup echo, `.env.example` (`AP_TEMPLATES_SOURCE_URL` commented opt-in; `AP_POSTGRES_DATABASE=fuji`).
 
 ## 4. Verification record
 
-_(filled in during the verification phase — each §4.3 step of the brief with output snippets)_
+| Step | Result |
+| --- | --- |
+| `npm run lint-dev` | ✅ 38/38 tasks, **0 errors** (71 pre-existing warnings, untouched files) |
+| Type build (`turbo build` web/api/worker/engine/server-utils) | ✅ 18/18 tasks (api `tsc`, web `vite`+checker) after adding the `TEMPLATES_SOURCE_URL` validator entry |
+| `check-migrations` locally | ⚠️ fails for environmental reasons only: local Node 18 `ts-node` cannot `require()` ESM `evlog` (ERR_REQUIRE_ESM) — migration step never runs, drift check then fails. Validated via container boot instead (Node 24). |
+| Docker image | ✅ `docker build -t fuji:latest .` exit 0 (1.35 GB) |
+| Boot (compose: fuji-app, 1 worker, pgvector, redis) | ✅ `Starting Fuji (APP mode)`; all migrations ran **incl. `RebrandDefaultPlatformToFuji1867000000000`** (verified in `migrations` table) |
+| Login page | ✅ `<title>Fuji</title>`; icons `/logo.svg`, `/logo-192.png`, `/logo-180.png`, `/favicon.ico` all HTTP 200 with correct content types |
+| THEME flag | ✅ `websiteName: Fuji`, logos → `http://localhost:8080/logo*.svg` (absolute because `.env` sets `AP_FRONTEND_URL`), primary `#6e41e2`; `PRIVACY_POLICY_URL`/`TERMS_OF_SERVICE_URL` absent |
+| Sign-up | ✅ user created, `verified: true`, platform + project provisioned |
+| Piece catalog (registry sync kept on) | ✅ **776 pieces** incl. `@activepieces/piece-http@0.13.3`, `piece-webhook@0.1.43` |
+| Flow E2E | ⚠️ partial: flow created; webhook trigger (`piece-webhook`/`catch_webhook`) + HTTP step (`send_request`) configured and published **only after** the worker Socket.IO link was fixed locally — the stock `.env` default `AP_FRONTEND_URL=http://localhost:8080` points the worker container at itself; **local compose needs `AP_INTERNAL_URL=http://app:3000`** (added to local `.env`; upstream `.env.example` has the same default). Final publish/webhook-execution re-test was skipped on request. Root cause is compose/env wiring, not branding code. |
+| Bundle grep (`dist/packages/web`, 190 hits) | ✅ all functional: 79 `@activepieces/*` specifiers, ~95 `cdn.activepieces.com/pieces|icons` catalog icons, 3 cloud/secrets OAuth URLs (inactive on CE self-host), 5 posthog prop names (telemetry off), `AIProviderName.ACTIVEPIECES='activepieces'` enum/DB key, MCP `mcpServers:{activepieces:…}` config slug, `activepiecesLogin` query param, `extractActivepiecesRouteFromUrl` embed-sdk symbol, EE embed-sdk `Activepieces:` error prefix, 11 locale SAML Audience-URI literals (§2.6). Zero marketing strings, product-name strings, or doc/sales links. |
 
 ## 5. Rebase notes — the brand patch
 
-Every file below is part of the brand patch. On upstream merges, conflicts in these files are
-branding conflicts — re-apply the Fuji side (or re-run the same substitutions). Files NOT listed
-here should merge clean.
+116 files (below). On upstream merges, conflicts in these files are branding conflicts — take the upstream change, then re-apply the same substitution. Highest-churn files (expect conflicts every merge): `packages/web/public/locales/*/translation.json` (11 files), `README.md`, `docs/**`, `packages/web/src/features/billing/**` (upstream actively reworks sales CTAs), `packages/web/src/app/routes/platform/infra/**` (docs links re-added upstream), `packages/web/src/app/components/feature-*.tsx`.
 
-_(final list generated from `git diff --name-only main..rebrand` at the end of the change phase)_
+Re-apply checklist: (1) grep `rg -i activepieces packages/web/src packages/server/api/src/app packages/core/shared/src -g '!*ee*'` and disposition new hits per §2; (2) regenerate locale renames with the same script pattern (rename key+value, delete unused, keep SAML audience literal); (3) verify `DEFAULT_BRAND_LOGOS`/`theme.ts` still feed the sentinel in `full-logo.tsx`; (4) re-run `npm run lint-dev` + `turbo build --filter=web --filter=api` + bundle grep.
+
+```
+.env.example                    BRANDING.md                    README.md
+bun.lock                        deploy/activepieces-helm/values.yaml
+deploy/pulumi/Pulumi.yaml       docker-compose.yml             docker-entrypoint.sh
+docs/docs.json                  docs/install/options/docker-compose.mdx
+docs/install/options/docker.mdx
+packages/core/shared/package.json
+packages/core/shared/src/index.ts
+packages/core/shared/src/lib/core/common/brand-logos.ts
+packages/core/shared/src/lib/core/feedback-url.ts      (deleted)
+packages/core/shared/src/lib/core/support-url.ts       (deleted)
+packages/server/api/src/app/ai/{ai-provider-service,ai-router}.ts
+packages/server/api/src/app/ai/providers/index.ts
+packages/server/api/src/app/app.ts
+packages/server/api/src/app/database/migration/postgres/1867000000000-RebrandDefaultPlatformToFuji.ts
+packages/server/api/src/app/database/postgres-connection.ts
+packages/server/api/src/app/flags/{flag.service,theme}.ts
+packages/server/api/src/app/helper/system-validator.ts
+packages/server/api/src/app/helper/system/{system-props,system}.ts
+packages/server/api/src/app/knowledge-base/knowledge-base.module.ts
+packages/server/api/src/app/mcp/{mcp-server-builder,mcp-usage-tracker}.ts
+packages/server/api/src/app/mcp/tools/{ap-setup-guide,ap-validate-step-config,piece-expertise}.ts
+packages/server/api/src/app/platform/platform-configuration.service.ts
+packages/server/api/src/app/template/community-templates.service.ts
+packages/server/utils/src/{ai-utils,ap-version}.ts
+packages/web/public/{favicon.ico,logo-180.png,logo-192.png,logo-full.svg,logo.svg}
+packages/web/public/locales/{ar,de,en,es,fr,ja,nl,pt,ru,zh,zh-TW}/translation.json
+packages/web/vite.config.mts
+packages/web/src/app/builder/builder-header/builder-header.tsx
+packages/web/src/app/builder/flow-canvas/utils/flow-screenshot-utils.ts
+packages/web/src/app/builder/piece-properties/text-input-with-mentions/components/function-search-popover.tsx
+packages/web/src/app/builder/piece-properties/text-input-with-mentions/tiptap-editor.tsx
+packages/web/src/app/builder/pieces-selector/no-results-found.tsx
+packages/web/src/app/builder/run-details/flow-step-input-output.tsx
+packages/web/src/app/components/account-settings/language-toggle.tsx
+packages/web/src/app/components/{billing-page-shell,embedding-analytics-loader,feature-banner,feature-sample,feature-teaser,locked-feature-guard}.tsx
+packages/web/src/app/components/help-and-feedback.tsx            (deleted)
+packages/web/src/app/components/primary-rail/index.tsx
+packages/web/src/app/components/project-settings/pieces/index.tsx
+packages/web/src/app/components/sidebar/sidebar-user.tsx
+packages/web/src/app/routes/chat-with-ai/conversation-list.tsx
+packages/web/src/app/routes/chat/flow-chat.tsx
+packages/web/src/app/routes/embed/embedded-mcp-authorize-dialog.tsx
+packages/web/src/app/routes/mcp-authorize/index.tsx
+packages/web/src/app/routes/mcp-server/grants/grants-tab.tsx
+packages/web/src/app/routes/mcp-server/mcp-client-catalog.ts
+packages/web/src/app/routes/mcp-server/pieces/pieces-panel.tsx
+packages/web/src/app/routes/platform/billing/index.tsx
+packages/web/src/app/routes/platform/infra/configurations/{telemetry-section,tracked-events-dialog}.tsx
+packages/web/src/app/routes/platform/infra/event-destinations/lib/handler-flow-builder.ts
+packages/web/src/app/routes/platform/infra/health/components/{internal-errors-table,system-health-tab}.tsx
+packages/web/src/app/routes/platform/infra/workers/{index.tsx,worker-assignments-tab.tsx}
+packages/web/src/app/routes/platform/{plan-feature-sample.tsx,sample-data.ts}
+packages/web/src/app/routes/platform/security/api-keys/index.tsx
+packages/web/src/app/routes/platform/security/embed/index.tsx
+packages/web/src/app/routes/platform/security/sso/saml-dialog.tsx
+packages/web/src/assets/img/custom/Activepieces*.png   (deleted ×2)
+packages/web/src/components/custom/activepieces-wordmark.tsx   (deleted)
+packages/web/src/components/custom/{fuji-wordmark.tsx,full-logo.tsx,locked-alert.tsx,show-powered-by.tsx}
+packages/web/src/features/agents/ai-model/index.tsx
+packages/web/src/features/authentication/components/sign-up-form.tsx
+packages/web/src/features/billing/components/automatic-trial-activation.tsx
+packages/web/src/features/billing/components/feature-usage/credits-info-dialog.tsx
+packages/web/src/features/billing/components/plan-selector-utils.ts
+packages/web/src/features/billing/components/plan-selector.tsx
+packages/web/src/features/billing/components/request-trial.tsx    (deleted)
+packages/web/src/features/billing/hooks/{use-feature-gate,use-team-project-limit-guard,use-upgrade-click}.ts*
+packages/web/src/features/billing/index.ts
+packages/web/src/features/billing/utils/{feature-tier,platform-features}.ts
+packages/web/src/features/pieces/components/install-piece-dialog.tsx
+packages/web/src/features/platform-admin/hooks/platform-pieces-hooks.ts
+packages/web/src/features/project-releases/components/connect-git-dialog.tsx
+packages/web/src/features/tables/components/import-table-dialog.tsx
+tools/update.sh
+```
+
+## 6. Known limitations & operator notes
+
+- **Email logo**: with `AP_FRONTEND_URL` set, default logos are absolute and render in emails; without it they are relative (`/logo.svg`) and email clients show the `{{platformName}}` ("Fuji") alt text instead of an image. Set `AP_FRONTEND_URL` on any real deployment.
+- **Templates gallery**: off by default; `AP_TEMPLATES_SOURCE_URL` re-enables against a source you control (self-hosted JSON recommended — upstream gallery content carries their branding).
+- **Placeholder artwork**: logos are generated purple/white mountain placeholders. To re-skin: replace the 5 files in `packages/web/public/`, the mark in `fuji-wordmark.tsx`, `show-powered-by.tsx`, `flow-screenshot-utils.ts` (`POWERED_BY_LOGO_PATH`), and `defaultTheme.primaryColor` in `flags/theme.ts`.
+- **Piece icons** still load from `cdn.activepieces.com` (functional catalog data). Rehosting would require rewriting synced `piece_metadata.logoUrl` values.
+- **Local compose**: set `AP_INTERNAL_URL=http://app:3000` so the worker's Socket.IO can reach the app (the stock `AP_FRONTEND_URL=http://localhost:8080` default points the worker at itself inside the container network).
+- **EE-bound branded strings** (§2.10) remain upstream-branded by license design; none execute on CE.
